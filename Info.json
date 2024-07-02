@@ -1,0 +1,28 @@
+{
+    "THEME": "Nitro",
+    "STD-Path": "D:/Code/Python/Nitrogen Set/Nitrogen Text Editor 2/NitrogenEditor.pyw",
+    "EXTENSION-PACK": [
+        "EXT_NITROGEN_EASTER_EGG",
+        "EXT_EASY_TAB_CHANGING",
+        "EXT_NITRO_SYNTAX"
+    ],
+    "NoteTasks": 1,
+    "Task1Text": "hello",
+    "Task2Text": "...",
+    "Task3Text": "...",
+    "Task4Text": "...",
+    "Task5Text": "...",
+    "Task6Text": "...",
+    "Task7Text": "...",
+    "Task8Text": "...",
+    "Task9Text": "...",
+    "Task1Checked": true,
+    "Task2Checked": false,
+    "Task3Checked": false,
+    "Task4Checked": false,
+    "Task5Checked": false,
+    "Task6Checked": false,
+    "Task7Checked": false,
+    "Task8Checked": false,
+    "Task9Checked": false
+}

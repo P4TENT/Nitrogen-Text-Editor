@@ -1,0 +1,16 @@
+SHARED_root = None                      # * The root app
+SHARED_text_area = None                 # * The area whete you write text
+SHARED_LineCount_label = None           # * The label that shows the line and line column
+SHARED_ChangeTabs = None                # * ! FUNCTION ! The function that helps to change tabs
+SHARED_ThemeMode = None                 # * A variable that shows what theme is currently used
+SHARED_ChangeTheme = None               # * ! FUNCTION ! The function that adds a menu for changing the theme
+SHARED_separatorColor = None
+SHARED_text_tabs1 = None
+SHARED_text_tabs2 = None
+SHARED_separator1 = None
+SHARED_separator2 = None
+SHARED_btn_File = None
+SHARED_btn_Settings = None
+SHARED_btn_TaskNotes = None
+SHARED_btn_SearchExtensions = None
+SHARED_btn_InstalledExtensions = None
