@@ -668,19 +668,17 @@ def Delete_TaskButton(button: int):
             
 def DeleteTaskNote():
     if delete_selected_button in range(1, 10):  # Ensure the button number is within the valid range
-        start_task = delete_selected_button
-        task_count = 9  # Assuming there are 9 tasks
+        task_count = 9 
 
-        for i in range(start_task, task_count):
-            next_task_text = Info[f"Task{i+1}Text"]
-            next_task_checked = Info[f"Task{i+1}Checked"]
+        # Shift tasks up
+        for i in range(delete_selected_button, task_count):
+            next_task_text = Info.get(f"Task{i+1}Text", "...")
+            next_task_checked = Info.get(f"Task{i+1}Checked", False)
             
-            if next_task_text != "...":
-                Info[f"Task{i}Text"] = next_task_text
-                Info[f"Task{i}Checked"] = next_task_checked
-            else:
-                Info[f"Task{i}Text"] = "..."
-                Info[f"Task{i}Checked"] = False
+            Info[f"Task{i}Text"] = next_task_text
+            Info[f"Task{i}Checked"] = next_task_checked
+            
+            if next_task_text == "...":
                 break
 
         # Clear the last task slot
@@ -688,53 +686,19 @@ def DeleteTaskNote():
         Info[f"Task{task_count}Checked"] = False
 
         Info["NoteTasks"] -= 1
+
+    # Update task check texts and states
+    for i in range(1, 10):
+        task_text = Info[f"Task{i}Text"]
+        task_check_widget = globals().get(f"Task{i}Check")
         
-    Task1Check.configure(text=Info["Task1Text"])
-    Task2Check.configure(text=Info["Task2Text"])
-    Task3Check.configure(text=Info["Task3Text"])
-    Task4Check.configure(text=Info["Task4Text"])
-    Task5Check.configure(text=Info["Task5Text"])
-    Task6Check.configure(text=Info["Task6Text"])
-    Task7Check.configure(text=Info["Task7Text"])
-    Task8Check.configure(text=Info["Task8Text"])
-    Task9Check.configure(text=Info["Task9Text"])
-    
-    if Info["Task1Text"] != "...": 
-        Task1Check.configure(state="normal")
-    else:
-        Task1Check.configure(state="disabled")
-    if Info["Task2Text"] != "...": 
-        Task2Check.configure(state="normal")
-    else:
-        Task2Check.configure(state="disabled")
-    if Info["Task3Text"] != "...": 
-        Task3Check.configure(state="normal")
-    else:
-        Task3Check.configure(state="disabled")
-    if Info["Task4Text"] != "...": 
-        Task4Check.configure(state="normal")
-    else:
-        Task4Check.configure(state="disabled")
-    if Info["Task5Text"] != "...": 
-        Task5Check.configure(state="normal")
-    else:
-        Task5Check.configure(state="disabled")
-    if Info["Task6Text"] != "...": 
-        Task6Check.configure(state="normal")
-    else:
-        Task6Check.configure(state="disabled")
-    if Info["Task7Text"] != "...": 
-        Task7Check.configure(state="normal")
-    else:
-        Task7Check.configure(state="disabled")
-    if Info["Task8Text"] != "...": 
-        Task8Check.configure(state="normal")
-    else:
-        Task8Check.configure(state="disabled")
-    if Info["Task9Text"] != "...": 
-        Task9Check.configure(state="normal")
-    else:
-        Task9Check.configure(state="disabled")
+        if task_check_widget:
+            task_check_widget.configure(text=task_text)
+            if task_text != "...":
+                task_check_widget.configure(state="normal")
+            else:
+                task_check_widget.configure(state="disabled")
+
             
 def DeleteTask():
     global DeleteTaskChild, Button1, Button2, Button3, Button4, Button5, Button6, Button7, Button8, Button9
@@ -810,41 +774,14 @@ def DeleteTask():
     
 def ModifyTaskNote():
     global selected_button
-    if selected_button == 1 and Info["Task1Text"] != "...":
-        Task1Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task1Text"] = ModifyTaskName_entry.get()
-    elif selected_button == 2 and Info["Task2Text"] != "...":
-        Task2Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task2Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 3 and Info["Task3Text"] != "...":
-        Task3Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task3Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 4 and Info["Task4Text"] != "...":
-        Task4Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task4Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 5 and Info["Task5Text"] != "...":
-        Task5Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task5Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 6 and Info["Task6Text"] != "...":
-        Task6Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task6Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 7 and Info["Task7Text"] != "...":
-        Task7Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task7Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 8 and Info["Task8Text"] != "...":
-        Task8Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task8Text"] = ModifyTaskName_entry.get()
-        
-    elif selected_button == 9 and Info["Task9Text"] != "...":
-        Task9Check.configure(text=ModifyTaskName_entry.get())
-        Info["Task9Text"] = ModifyTaskName_entry.get()
-        
+    task_text_key = f"Task{selected_button}Text"
+    if selected_button in range(1, 10) and Info.get(task_text_key) != "...":
+        task_check = globals().get(f"Task{selected_button}Check")
+        if task_check:
+            new_text = ModifyTaskName_entry.get()
+            task_check.configure(text=new_text)
+            Info[task_text_key] = new_text
+            
     ModifyTaskChild.destroy()
     selected_button = 0
     
@@ -972,80 +909,25 @@ def OpenTasks():
     Task8Check.pack(anchor="w", padx=10, pady=(27,0))
     Task9Check = ctk.CTkCheckBox(BACKGROUND, text=Info["Task9Text"], font=("helvetica", 17, "bold"), state="disabled", command=TaskCheckBox, variable=var9)
     Task9Check.pack(anchor="w", padx=10, pady=(27,0))
-    
-    if Info["Task1Text"] != "...": 
-        Task1Check.configure(state="normal")
-    else:
-        Task1Check.configure(state="disabled")
-        Info["Task1Checked"] = False
-    if Info["Task2Text"] != "...": 
-        Task2Check.configure(state="normal")
-    else:
-        Task2Check.configure(state="disabled")
-        Info["Task2Checked"] = False
-    if Info["Task3Text"] != "...": 
-        Task3Check.configure(state="normal")
-    else:
-        Task3Check.configure(state="disabled")
-        Info["Task3Checked"] = False
-    if Info["Task4Text"] != "...": 
-        Task4Check.configure(state="normal")
-    else:
-        Task4Check.configure(state="disabled")
-        Info["Task4Checked"] = False
-    if Info["Task5Text"] != "...": 
-        Task5Check.configure(state="normal")
-    else:
-        Task5Check.configure(state="disabled")
-        Info["Task5Checked"] = False
-    if Info["Task6Text"] != "...": 
-        Task6Check.configure(state="normal")
-    else:
-        Task6Check.configure(state="disabled")
-        Info["Task6Checked"] = False
-    if Info["Task7Text"] != "...": 
-        Task7Check.configure(state="normal")
-    else:
-        Task7Check.configure(state="disabled")
-        Info["Task7Checked"] = False
-    if Info["Task8Text"] != "...": 
-        Task8Check.configure(state="normal")
-    else:
-        Task8Check.configure(state="disabled")
-        Info["Task8Checked"] = False
-    if Info["Task9Text"] != "...": 
-        Task9Check.configure(state="normal")
-    else:
-        Task9Check.configure(state="disabled")
-        Info["Task9Checked"] = False
-    
-    if Info["Task1Checked"]:
-        var1.set("1")
-        Task1Check.select()
-    if Info["Task2Checked"]: 
-        Task2Check.select()
-        var2.set("1")
-    if Info["Task3Checked"]: 
-        Task3Check.select()
-        var3.set("1")
-    if Info["Task4Checked"]: 
-        Task4Check.select()
-        var4.set("1")
-    if Info["Task5Checked"]: 
-        Task5Check.select()
-        var5.set("1")
-    if Info["Task6Checked"]: 
-        Task6Check.select()
-        var6.set("1")
-    if Info["Task7Checked"]: 
-        Task7Check.select()
-        var7.set("1")
-    if Info["Task8Checked"]: 
-        Task8Check.select()
-        var8.set("1")
-    if Info["Task9Checked"]: 
-        Task9Check.select()
-        var9.set("1")
+
+    for i in range(1, 10):
+        task_text_key = f"Task{i}Text"
+        task_checked_key = f"Task{i}Checked"
+        task_check_widget = globals().get(f"Task{i}Check")
+        task_var = globals().get(f"var{i}")
+
+        if task_check_widget:
+            if Info[task_text_key] != "...":
+                task_check_widget.configure(state="normal")
+            else:
+                task_check_widget.configure(state="disabled")
+                Info[task_checked_key] = False
+
+            if Info[task_checked_key]:
+                task_check_widget.select()
+                task_var.set("1")
+            else:
+                task_var.set("0")
     
     if ThemeMode == "Light":
         b_AddTask.configure(fg_color="#C0C0C0", hover_color="#F5F5F5", text_color="#848482")
