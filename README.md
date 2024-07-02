@@ -8,3 +8,5 @@
   ###     - ALT + 3 - CHANGES TO TAB 3
   ###     - ALT + 4 - CHANGES TO TAB 4
   ###     - ALT + N - EASTEREGG THEME
+
+## - If You Want To Remove The Syntax Highlighting, Delete "EXT_NITRO_SYNTAX" From 'Info.json'
