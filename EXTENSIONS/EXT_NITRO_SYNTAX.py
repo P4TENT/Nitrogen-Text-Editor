@@ -81,7 +81,6 @@ def _highlight_syntax(event=None):
 def _highlight_syntax_idle(event=None):
     _setup_tags()
     
-    # Îndepărtează toate tag-urile din text_area
     text_area.tag_remove("function", "1.0", "end-1c")
     text_area.tag_remove("yellow_argument", "1.0", "end-1c")
     text_area.tag_remove("keyword1", "1.0", "end-1c")
@@ -98,7 +97,6 @@ def _highlight_syntax_idle(event=None):
     text_area.tag_remove("uppercase", "1.0", "end-1c")
     text_area.tag_remove("string", "1.0", "end-1c")
     
-    # Obține numărul total de linii
     line_count = int(text_area.index('end-1c').split('.')[0])
     
     for line in range(1, line_count + 1):
@@ -106,13 +104,12 @@ def _highlight_syntax_idle(event=None):
         line_end = f"{line}.end"
         text = text_area.get(line_start, line_end)
         
-        # Aplică pattern-urile pentru fiecare linie
-        _apply_pattern_idle(FUNCTION_DEF_PATTERN, text, "function", line_start, group=1)  # Group 1 pentru numele funcțiilor
-        _apply_pattern_idle(FUNCTION_CALL_PATTERN, text, "function", line_start, group=1)  # Group 1 pentru numele funcțiilor
+        _apply_pattern_idle(FUNCTION_DEF_PATTERN, text, "function", line_start, group=1)
+        _apply_pattern_idle(FUNCTION_CALL_PATTERN, text, "function", line_start, group=1)
         _apply_pattern_idle(YELLOW_ARGUMENT_PATTERN, text, "yellow_argument", line_start)
         _apply_pattern_idle(KEYWORD_PATTERN1, text, "keyword1", line_start)
         _apply_pattern_idle(KEYWORD_PATTERN2, text, "keyword2", line_start)
-        _apply_pattern_idle(NUMBER_PATTERN, text, "number", line_start)  # Adăugat pentru numere
+        _apply_pattern_idle(NUMBER_PATTERN, text, "number", line_start) 
         _apply_pattern_idle(OPERATOR_PATTERN, text, "operator", line_start)  
         _apply_pattern_idle(LOGICAL_OPERATOR_PATTERN, text, "logical", line_start)
         _apply_pattern_idle(TYPE_PATTERN, text, "type", line_start)
@@ -129,7 +126,6 @@ def _apply_pattern_idle(pattern, text, tag, line_start, group=None):
         start_index = f"{line_start}+{match.start()}c"
         end_index = f"{line_start}+{match.end()}c"
         if group is not None:
-            # Aplică tag-ul doar pentru partea de text a potrivirii (excluzând parantezele)
             end_index = f"{line_start}+{match.start(group) + len(match.group(group))}c"
         text_area.tag_add(tag, start_index, end_index)
 
